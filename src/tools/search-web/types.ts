@@ -10,5 +10,5 @@ export interface SearchResult {
 /** 搜索引擎抽象接口 — 新增引擎只需实现此接口 */
 export interface SearchProvider {
   readonly name: string;
-  search(query: string, limit?: number): Promise<SearchResult[]>;
+  search(query: string, limit?: number, signal?: AbortSignal): Promise<SearchResult[]>;
 }

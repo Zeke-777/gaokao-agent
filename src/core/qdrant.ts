@@ -1,5 +1,5 @@
-import * as fs from "node:fs";
 import * as path from "node:path";
+import { normalizePathSep, readMarkdown } from "../tools/wiki-resolve";
 
 /** Qdrant 返回的 point */
 interface QdrantPoint {
@@ -36,6 +36,7 @@ export class QdrantClient {
     collection: string,
     vector: number[],
     limit = 3,
+    signal?: AbortSignal,
   ): Promise<QdrantPoint[]> {
     const res = await fetch(
       `${this.baseUrl}/collections/${collection}/points/query`,
@@ -43,25 +44,25 @@ export class QdrantClient {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query: vector, limit, with_payload: true }),
+        signal,
       },
     );
-    if (!res.ok) return [];
+    if (!res.ok) {
+      throw new Error(`Qdrant search ${collection} failed: ${res.status}`);
+    }
     const data = (await res.json()) as {
       result?: { points?: QdrantPoint[] };
     };
     return data.result?.points || [];
   }
 
-  /** 读取完整 Markdown 文件（去 frontmatter） */
+  /** 读取完整 Markdown 文件（去 frontmatter，解析 [[wiki链接]]） */
   readFullPage(sourceFile: string): string {
     const filePath = path.join(this.stagingRoot, sourceFile);
-    if (!fs.existsSync(filePath)) return "";
-    let text = fs.readFileSync(filePath, "utf8");
-    // 去掉 YAML frontmatter
-    text = text.replace(/^---[\s\S]*?---\s*/m, "");
-    // 去掉 [[链接]] 语法保留文字
-    text = text.replace(/\[\[([^\]]+)\]\]/g, "$1");
-    return text.trim();
+    // sourceFile 格式: "majors/04_专业库/计算机科学与技术.md"
+    // 剥掉第一段 collection key 得到 wiki 内目录，用于相对链接解析
+    const wikiDir = normalizePathSep(path.dirname(sourceFile)).replace(/^[^/]+\/?/, "");
+    return readMarkdown(filePath, this.stagingRoot, wikiDir);
   }
 
   /** 搜索并返回完整文件内容 */
@@ -69,15 +70,26 @@ export class QdrantClient {
     collection: string,
     vector: number[],
     limit = 3,
+    signal?: AbortSignal,
   ): Promise<KnowledgeHit[]> {
-    const points = await this.search(collection, vector, limit);
+    const points = await this.search(collection, vector, limit, signal);
     return points
       .filter((p) => p.payload?.source)
-      .map((p) => ({
-        score: p.score,
-        sourceFile: p.payload!.source as string,
-        fullContent: this.readFullPage(p.payload!.source as string),
-        snippet: (p.payload!.text as string) || "",
-      }));
+      .map((p) => {
+        const rawSource = p.payload!.source as string;
+        const category = (p.payload!.category as string) || "";
+        // 入库脚本在 source 前拼接了 category 前缀，这里剥离
+        // rawSource: "majors/04_专业库/矿业工程.md" → sourceFile: "04_专业库/矿业工程.md"
+        const sourceFile = category && rawSource.startsWith(category + "/")
+          ? rawSource.slice(category.length + 1)
+          : rawSource;
+        const stagingPath = `${category}/${sourceFile}`;
+        return {
+          score: p.score,
+          sourceFile,
+          fullContent: this.readFullPage(stagingPath),
+          snippet: (p.payload!.text as string) || "",
+        };
+      });
   }
 }

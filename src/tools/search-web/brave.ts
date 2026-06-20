@@ -6,7 +6,7 @@ export class BraveSearch implements SearchProvider {
 
   constructor(private apiKey: string, private baseUrl = "https://api.search.brave.com") {}
 
-  async search(query: string, limit = 5): Promise<SearchResult[]> {
+  async search(query: string, limit = 5, signal?: AbortSignal): Promise<SearchResult[]> {
     const res = await fetch(
       `${this.baseUrl}/res/v1/web/search?q=${encodeURIComponent(query)}&count=${limit}`,
       {
@@ -15,11 +15,12 @@ export class BraveSearch implements SearchProvider {
           "Accept-Encoding": "gzip",
           "X-Subscription-Token": this.apiKey,
         },
+        signal,
       },
     );
 
     if (!res.ok) {
-      throw new Error(`Brave search failed: ${res.status} ${await res.text()}`);
+      throw new Error(`Brave search failed: ${res.status}`);
     }
 
     const data = (await res.json()) as {

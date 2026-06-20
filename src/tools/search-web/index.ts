@@ -1,7 +1,3 @@
-export type { SearchProvider, SearchResult } from "./types";
-export { TavilySearch } from "./tavily";
-export { BraveSearch } from "./brave";
-
 import type { SearchProvider } from "./types";
 import { TavilySearch } from "./tavily";
 import { BraveSearch } from "./brave";

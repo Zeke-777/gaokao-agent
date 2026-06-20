@@ -1,4 +1,10 @@
 node_modules/
+dist/
 data/
 .env
 *.db
+.qdrant-initialized
+snapshots/
+qdrant/staging/
+CLAUDE.md
+.claude/

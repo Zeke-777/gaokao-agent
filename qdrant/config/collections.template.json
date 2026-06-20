@@ -1,0 +1,55 @@
+{
+  "collections": [
+    {
+      "name": "gaokao_policies_rules",
+      "sourceFolders": [
+        "01_政策规则"
+      ],
+      "stagingFolder": "staging/policies_rules",
+      "description": "政策规则、赋分、提前批、特招、公费定向等规则层",
+      "recommendedDistance": "Cosine",
+      "notes": "适合回答制度、规则、路径、批次、专项和特殊类型招生问题。"
+    },
+    {
+      "name": "gaokao_province_data",
+      "sourceFolders": [
+        "02_省份数据"
+      ],
+      "stagingFolder": "staging/province_data",
+      "description": "各省录取数据总览、历史数据口径和官方核对入口",
+      "recommendedDistance": "Cosine",
+      "notes": "适合回答某省怎么报、历史数据怎么看、控制线与投档线口径。"
+    },
+    {
+      "name": "gaokao_schools",
+      "sourceFolders": [
+        "03_院校库"
+      ],
+      "stagingFolder": "staging/schools",
+      "description": "学校画像、优势专业、报考风险、分省总表",
+      "recommendedDistance": "Cosine",
+      "notes": "适合学校值不值得报、学校层级、学校风险问题。专业问题不建议优先连这个 collection。"
+    },
+    {
+      "name": "gaokao_majors",
+      "sourceFolders": [
+        "04_专业库"
+      ],
+      "stagingFolder": "staging/majors",
+      "description": "专业优缺点、前景、家庭约束、发展路线、学校分层参考",
+      "recommendedDistance": "Cosine",
+      "notes": "适合专业前景、专业适配、行业趋势、普通家庭专业选择。"
+    },
+    {
+      "name": "gaokao_style_cases",
+      "sourceFolders": [
+        "05_张雪峰风格库",
+        "06_案例库"
+      ],
+      "stagingFolder": "staging/style_cases",
+      "description": "张雪峰风格、家庭约束标签、情绪沟通模板、案例库",
+      "recommendedDistance": "Cosine",
+      "notes": "适合风格、情绪价值、家庭约束、捡漏和案例化表达。"
+    }
+  ]
+}

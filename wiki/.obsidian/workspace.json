@@ -1,0 +1,210 @@
+{
+  "main": {
+    "id": "33d5237fdc504c9f",
+    "type": "split",
+    "children": [
+      {
+        "id": "1afcd14f6e34b5c3",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "cf734ad9c658e6a3",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "关系图谱"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "55d275cbf063aa7f",
+    "type": "split",
+    "children": [
+      {
+        "id": "1114719e8b6eaa09",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "f28a23c86d7c6344",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "文件列表"
+            }
+          },
+          {
+            "id": "34a0d42aca682f6d",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "搜索"
+            }
+          },
+          {
+            "id": "a4ecace949542aca",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "书签"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 282.5
+  },
+  "right": {
+    "id": "23b28b9a19b52523",
+    "type": "split",
+    "children": [
+      {
+        "id": "ac4382b1fbddf033",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "1e050a4f4b45cb96",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "00_全国高考地图.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "反向链接"
+            }
+          },
+          {
+            "id": "dd29996821836873",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "00_全国高考地图.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "出链"
+            }
+          },
+          {
+            "id": "a3026300f4b8f987",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "标签"
+            }
+          },
+          {
+            "id": "a59df2a197d3c651",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "添加笔记属性"
+            }
+          },
+          {
+            "id": "8ed86e897e450677",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "00_全国高考地图.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "大纲"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:新建白板": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false,
+      "bases:新建数据库": false
+    }
+  },
+  "active": "cf734ad9c658e6a3",
+  "lastOpenFiles": [
+    "03_院校库/河南/河南大学.md",
+    "04_专业库/比较文学与世界文学.md",
+    "03_院校库/安徽/安徽理工大学.md",
+    "03_院校库/贵州/贵阳康养职业大学.md",
+    "03_院校库/安徽/淮北师范大学.md",
+    "03_院校库/安徽/安徽医科大学.md",
+    "03_院校库/安徽/安徽所有公办本科院校总表.md",
+    "03_院校库/安徽/安徽工程大学.md",
+    "04_专业库/计算机科学与技术.md",
+    "03_院校库/安徽/安徽大学.md",
+    "04_专业库/汉语言文学.md",
+    "00_全国高考地图.md",
+    "00_文档关系图谱.md",
+    "07_录取数据/数据索引与查询路径.md",
+    "07_录取数据/README.md",
+    "07_录取数据/AI查数与数据使用规则.md",
+    "07_录取数据/数据检查报告_2026-04-12.md",
+    "04_专业库/临床医学.md",
+    "04_专业库/软件工程.md",
+    "03_院校库/重庆/西南大学.md",
+    "03_院校库/重庆/四川外国语大学.md",
+    "03_院校库/重庆/四川美术学院.md",
+    "03_院校库/北京/北京大学.md",
+    "02_省份数据/README.md",
+    "01_政策规则/README.md"
+  ]
+}

@@ -12,7 +12,7 @@ export class TavilySearch implements SearchProvider {
 
   constructor(private apiKey: string, private baseUrl = "https://api.tavily.com") {}
 
-  async search(query: string, limit = 5): Promise<SearchResult[]> {
+  async search(query: string, limit = 5, signal?: AbortSignal): Promise<SearchResult[]> {
     const res = await fetch(`${this.baseUrl}/search`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -22,10 +22,11 @@ export class TavilySearch implements SearchProvider {
         max_results: limit,
         search_depth: "basic",
       }),
+      signal,
     });
 
     if (!res.ok) {
-      throw new Error(`Tavily search failed: ${res.status} ${await res.text()}`);
+      throw new Error(`Tavily search failed: ${res.status}`);
     }
 
     const data = (await res.json()) as { results: TavilyResult[] };

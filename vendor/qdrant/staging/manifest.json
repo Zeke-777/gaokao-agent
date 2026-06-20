@@ -1,8 +1,0 @@
-{
-  "policies_rules": { "count": 39, "targetDir": "./staging/policies_rules" },
-  "province_data":  { "count": 64, "targetDir": "./staging/province_data" },
-  "schools":        { "count": 993,"targetDir": "./staging/schools" },
-  "majors":         { "count": 176,"targetDir": "./staging/majors" },
-  "style_cases":    { "count": 37, "targetDir": "./staging/style_cases" },
-  "score_rules":    { "count": 3,  "targetDir": "./staging/score_rules" }
-}
