@@ -21,17 +21,16 @@ export class SessionRepo {
     return this.get(id)!;
   }
 
-  list(limit = 20): Session[] {
-    return getDb()
-      .prepare(
-        `SELECT s.*, COUNT(m.id) as message_count
+  list(limit?: number): Session[] {
+    const sql = `SELECT s.*, COUNT(m.id) as message_count
          FROM sessions s
          LEFT JOIN messages m ON m.session_id = s.id AND m.role IN ('user', 'assistant')
          GROUP BY s.id
          ORDER BY s.updated_at DESC
-         LIMIT ?`
-      )
-      .all(limit) as Session[];
+         ${limit != null ? "LIMIT ?" : ""}`;
+    return (limit != null
+      ? getDb().prepare(sql).all(limit)
+      : getDb().prepare(sql).all()) as Session[];
   }
 
   get(id: string): Session | null {
