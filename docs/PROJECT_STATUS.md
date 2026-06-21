@@ -1,6 +1,6 @@
 # 高考志愿 Agent 原型 — 项目状态
 
-> 版本: v1.0.0 | 日期: 2026-06-19 | 状态: 功能完整
+> 版本: v1.1.0 | 日期: 2026-06-21 | 状态: 功能完整
 
 ---
 
@@ -48,6 +48,7 @@ agent-prototype/
 │   ├── tools/
 │   │   ├── types.ts                ← Tool 接口 + ToolDefinition
 │   │   ├── search-knowledge.ts     ← 知识库检索（5集合，topK=5）
+│   │   ├── search-data.ts          ← 录取数据库查询（school/major/line）
 │   │   ├── search-wiki.ts          ← Wiki 文件读取 + name index 自动歧义解析
 │   │   ├── web-search.ts           ← Web 搜索（Tavily/Brave）
 │   │   ├── wiki-resolve.ts         ← [[链接]] 栈式解析（2分支）
@@ -102,6 +103,7 @@ GaokaoAgent (~42行)
 | 工具 | 功能 | 参数 |
 |------|------|------|
 | `search_knowledge` | 5 集合语义检索，返回完整文档 | query, topK(默认5), collections |
+| `search_data` | SQLite 录取数据库查询（2024-2025） | query_type(school/major/line), school, province, major, year, limit |
 | `search_web` | Tavily/Brave 实时搜索 | query, limit |
 | `search_wiki` | wiki 文件读取 + name index 自动歧义 | path（路径或文件名） |
 
@@ -132,11 +134,18 @@ cd D:/zhangxuefeng/agent-prototype
 # 启动 Qdrant（Windows 用 qdrant.exe，其他系统用 qdrant）
 qdrant --config-path ./qdrant/config/qdrant.yaml
 
+# === 开发模式 ===
 # 后端 API
 bun run server          # http://127.0.0.1:3211
-
-# 前端 dev
+# 前端 dev（HMR 热更新）
 bun run web             # http://127.0.0.1:3210
+
+# === 生产模式 ===
+bun run build           # 构建前端静态文件到 src/web/dist/
+bun run server          # 单端口托管全部 — http://127.0.0.1:3211
+                        # /      → 开始页（粒子动画）
+                        # /app   → React SPA
+                        # /api/* → API
 
 # CLI REPL
 bun run cli
@@ -282,3 +291,23 @@ Agent 解耦重构 + 架构规范化。详见 git log。
 25. **消息对齐**：用户消息靠右 75%，AI 回复靠左 85%
 26. **字体优化**：改用 Inter + SF Pro Display
 27. **时间信息**：系统提示词加入 2026 年，优先参考 2025 年数据
+
+## 十五、v1.1.0 主要变更 (2026-06-21)
+
+### 前端
+1. **开始页（Landing Page）**：Three.js 粒子动画 + 打字标题"致敬，张雪峰老师" + 5 张玻璃卡片项目总览，开始按钮跳转 /app
+2. **后端托管静态前端**：server.ts 新增静态文件服务，生产模式 `bun run build && bun run server` 单端口托管全部（/ → 开始页，/app → SPA，/api/* → API）。新增 `build` 脚本
+3. **欢迎页打字动效**："有什么需要我来分析的？"逐字揭示 + 矩形块光标，对齐开始页设计风格
+4. **光标优化**：从文字符号 ▊ 改为 4px 实心矩形块（`display: inline-block + background`），blink 0.8s
+5. **欢迎标题字号加大**：desktop `clamp(48px, 6vw, 72px)`，mobile `clamp(36px, 8vw, 48px)`
+6. **AI 输出行间距修复**：line-height 1.7→1.55，assistant 气泡 white-space→normal，p margin 8px→4px
+
+### 工具与提示词
+7. **search_data 工具**：新增，查询 SQLite 录取数据库（gaokao_2025.db），支持 school/major/line 三种模式，47 万+ 条数据。含 SQL LIKE 转义、结果截断保护
+8. **系统提示词优化**：合并"当前时间"+"限制"为"基础约束"，工具使用按逻辑重排（原则→search_knowledge→search_data→search_wiki→并行策略→停止条件），示例从"580分"改为"物理类30000位次"
+
+### 配置
+9. **端口环境变量化**：PORT / VITE_DEV_PORT 写入 .env.example，vite.config.ts 动态读取（envDir + process.env），与后端端口联动。Embedding 注释改为云端默认
+
+### 构建
+10. **package.json**：新增 `build` 脚本（vite build），新增 `public/landing.html`

@@ -74,6 +74,10 @@ QDRANT_URL=http://127.0.0.1:6333
 # 搜索引擎（二选一）
 SEARCH_PROVIDER=tavily
 SEARCH_API_KEY=your-search-key
+
+# 端口（可选，默认值即以下）
+PORT=3211
+VITE_DEV_PORT=3210
 ```
 
 ### 启动 Qdrant
@@ -102,7 +106,7 @@ bun run qdrant/scripts/ingest-staging.cjs
 
 ### 启动服务
 
-**方式一：Web 界面（推荐）**
+**方式一：Web 界面 — 开发模式**
 
 需要同时启动后端 API 和前端开发服务器，分别在两个终端执行：
 
@@ -110,11 +114,23 @@ bun run qdrant/scripts/ingest-staging.cjs
 # 终端 1 — 启动后端 API 服务（默认 http://127.0.0.1:3211）
 bun run server
 
-# 终端 2 — 启动前端开发服务器（默认 http://127.0.0.1:3210）
+# 终端 2 — 启动前端开发服务器（HMR 热更新，默认 http://127.0.0.1:3210）
 bun run web
 ```
 
-**方式二：命令行模式**
+**方式二：Web 界面 — 生产模式**
+
+构建前端后，单端口托管全部：
+
+```bash
+bun run build           # 构建前端到 src/web/dist/
+bun run server          # http://127.0.0.1:3211
+                        # /      → 开始页
+                        # /app   → 聊天界面
+                        # /api/* → API
+```
+
+**方式三：命令行模式**
 
 无需启动前端，直接在终端对话，适合开发调试：
 
@@ -148,10 +164,12 @@ bun run cli
 │   │   └── system.ts           # 系统提示词（张雪峰风格）
 │   ├── tools/
 │   │   ├── search-knowledge.ts # 知识库检索
+│   │   ├── search-data.ts      # 录取数据查询
 │   │   ├── search-wiki.ts      # Wiki 追读
 │   │   ├── web-search.ts       # 联网搜索
 │   │   └── search-web/         # 搜索引擎适配
 │   └── web/                    # React 前端
+│       ├── public/landing.html # 开始页（粒子动画）
 ├── qdrant/
 │   ├── config/                 # 集合配置模板
 │   ├── scripts/                # 数据导入脚本
@@ -177,11 +195,21 @@ bun run cli
 | `majors`         | 专业前景、行业趋势      |
 | `style_cases`    | 张雪峰风格案例、家庭约束模板 |
 
+### `search_data` — 录取数据查询
+
+查询 SQLite 录取数据库（2024-2025），返回精确的分数、位次、招生计划：
+
+| 模式    | 说明                     |
+| ------- | ------------------------ |
+| `school` | 院校录取分数线             |
+| `major`  | 专业录取分数线（模糊匹配）   |
+| `line`   | 各省控制线 / 批次线        |
+
 ### `search_wiki` — Wiki 追读
 
 读取 Obsidian wiki 中的详细文档，支持 `[[引用]]` 展开。
 
-### `web_search` — 联网搜索
+### `search_web` — 联网搜索
 
 调用 Tavily 或 Brave 搜索引擎获取最新信息。
 
