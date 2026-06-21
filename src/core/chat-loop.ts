@@ -7,7 +7,7 @@ export class ChatLoop {
   constructor(
     private llm: LLMClient,
     private tools: ToolExecutor,
-    private maxRounds = 5,
+    private maxRounds = 10,
   ) {}
 
   async run(
