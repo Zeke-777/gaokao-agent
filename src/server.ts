@@ -4,6 +4,14 @@ import { createSSEStream } from "./sse-handler";
 
 // ====== 初始化 ======
 const agent = createAgent();
+const DIST = "./src/web/dist";
+
+// ====== 静态文件服务 ======
+async function serveStatic(filePath: string): Promise<Response | null> {
+  const file = Bun.file(filePath);
+  if (!(await file.exists())) return null;
+  return new Response(file);
+}
 
 // ====== CORS ======
 function cors(): Record<string, string> {
@@ -82,6 +90,29 @@ Bun.serve({
 
     // GET /api/health
     if (path === "/api/health") return json({ status: "ok", model: config.llmModel });
+
+    // ====== 静态前端 ======
+    // 首页
+    if (path === "/" || path === "/index.html") {
+      const resp = await serveStatic(`${DIST}/landing.html`);
+      if (resp) return resp;
+      return new Response("landing.html not found — run: bun run build", { status: 404 });
+    }
+
+    // SPA (/app → dist/index.html, /app/xxx → dist/xxx, fallback to index.html)
+    if (path.startsWith("/app")) {
+      const assetPath = path === "/app" ? "/index.html" : path.slice(4);
+      const resp = await serveStatic(`${DIST}${assetPath}`);
+      if (resp) return resp;
+      // SPA fallback: 前端路由（如 /app/settings）回退到 index.html
+      const fallback = await serveStatic(`${DIST}/index.html`);
+      if (fallback) return fallback;
+      return new Response("app not found — run: bun run build", { status: 404 });
+    }
+
+    // 其他静态文件兜底
+    const staticResp = await serveStatic(`${DIST}${path}`);
+    if (staticResp) return staticResp;
 
     return json({ error: "not found" }, 404);
   },

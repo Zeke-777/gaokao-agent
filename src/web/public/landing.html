@@ -1,0 +1,586 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>致敬 — 张雪峰老师</title>
+  <style>
+    :root {
+      --bg:      #F6F6F1;
+      --surface: #FFFFFF;
+      --fg:      #111827;
+      --fg-2:    #4B5563;
+      --muted:   #9CA3AF;
+      --border:  #E5E7EB;
+      --accent:  #FF5701;
+      --font-display: "Playfair Display", Georgia, "Times New Roman", serif;
+
+      --radius-md:   12px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+    body {
+      font-family: var(--font-display);
+      color: var(--fg);
+      background: var(--bg);
+      line-height: 1.55;
+      font-size: 15px;
+      min-height: 100vh;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    .hero {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      min-height: 100vh;
+      text-align: center;
+      padding: 100px 20px 40px;
+    }
+
+    .hero-title {
+      position: absolute;
+      top: 48px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .hero-credit {
+      position: absolute;
+      top: 130px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--font-display);
+      font-size: 16px;
+      color: var(--muted);
+      text-align: center;
+      max-width: 650px;
+      line-height: 1.6;
+    }
+
+    .hero-actions {
+      position: absolute;
+      top: 230px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .overview-section {
+      position: absolute;
+      top: 340px;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 0 20px 20px;
+      overflow-y: auto;
+    }
+
+    .overview-panel {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px 28px 20px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 16px;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .overview-note {
+      margin-top: 20px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(0, 0, 0, 0.08);
+      color: var(--fg-2);
+      font-size: 14px;
+      line-height: 1.75;
+      text-align: center;
+    }
+
+    .overview-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 20px;
+      color: var(--fg);
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .glass-row {
+      display: flex;
+      gap: 16px;
+    }
+
+    .glass-card {
+      flex: 1;
+      min-width: 0;
+      padding: 16px 14px;
+      background: rgba(255, 255, 255, 0.12);
+      color: var(--fg-2);
+      font-size: 15px;
+      border-radius: 14px;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      line-height: 1.6;
+    }
+    .glass-card strong {
+      display: block;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 18px;
+      color: var(--fg);
+      margin-bottom: 6px;
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(32px, 5vw, 56px);
+      line-height: 1.06;
+      letter-spacing: -0.02em;
+      max-width: 900px;
+      margin-bottom: 40px;
+      color: var(--fg);
+      min-height: 1.06em;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 4px;
+      height: 1.06em;
+      background: var(--fg);
+      margin-left: 3px;
+      vertical-align: text-bottom;
+      animation: blink 0.8s step-end infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 36px;
+      background: rgba(255, 255, 255, 0.15);
+      color: var(--fg);
+      font-weight: 500;
+      font-size: 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      pointer-events: auto;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    }
+    .btn-primary::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(0.5px) saturate(120%);
+      -webkit-backdrop-filter: blur(0.5px) saturate(120%);
+      opacity: 0.5;
+      z-index: -1;
+      filter: brightness(110%);
+      pointer-events: none;
+    }
+    .btn-primary svg {
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: clamp(24px, 7vw, 40px); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="hero-title">
+      <h1><span id="type-target"></span><span class="cursor"></span></h1>
+    </div>
+    <div class="hero-credit">该项目是一个面向高考考生和家长的志愿填报咨询 Agent。它不讲废话，不编数据，它先找数据再给结论最后讲现实，像一个愿意讲真话的老师。点击开始体验吧！最后，感谢张雪峰团队，小石谈AI技对该项目的数据支撑。</div>
+    <div class="hero-actions">
+      <a href="/app" class="btn-primary">
+      开始
+      <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+    </div>
+  </div>
+
+  <div class="overview-section">
+    <div class="overview-panel">
+      <div class="overview-title">项目总览</div>
+      <div class="glass-row">
+        <div class="glass-card" data-od-id="card-wiki"><strong>Wiki 知识库</strong>
+          1314 个 Markdown 文件，7 个目录：政策规则、省份数据、院校库（993 所）、专业库（176 个）、风格库、案例库、录取数据说明。Obsidian 格式，支持 [[双向链接]]，"00_全国高考地图"为总入口，四层深度阅读路径。<br><br>
+          <b>链接处理</b> — 裸引用（[[计算机]]）保留原样让 LLM 自行搜索；路径引用（[[01_政策规则/山东_2026]]）自动解析为可跳转文件路径。search_wiki 工具启动时构建 1274 个文件名索引，支持按路径精确读取，带路径遍历防护。
+        </div>
+        <div class="glass-card" data-od-id="card-rag"><strong>RAG 设计</strong>
+          原始素材来自 wiki 目录 Markdown，经 sync 脚本同步 staging，按标题切分，超 1200 字符按双换行再切，40 字符以下丢弃。DashScope embedding（1024 维）写入 Qdrant。<br><br>
+          <b>五集合隔离</b> — schools、majors、policies_rules、province_data、style_cases，共 10309 个向量。LLM 必须指定集合搜索，按 sourceFile 去重并回填完整原始文档。配套 search_wiki 工具按名索引、路径精确读取。
+        </div>
+        <div class="glass-card" data-od-id="card-db"><strong>录取数据库</strong>
+          SQLite（gaokao_2025.db），三张表：school_scores（1.6 万条）、major_scores（46 万条）、province_lines（68 条），覆盖 1014 所院校和全国 30+ 省级行政区。<br><br>
+          <b>数据维度</b> — 最低分、平均分、最高分、最低位次、招生计划数、控制线。索引建在 school、province、(school,province) 等高频路径，专业表额外加 major 模糊匹配索引。
+        </div>
+        <div class="glass-card" data-od-id="card-orch"><strong>工作流编排</strong>
+          ReAct 循环：用户提问后 LLM 流式思考并决定是否调用工具。tool_calls 逐个执行，结果注入对话历史，进入下一轮。最多 5 轮，超限后注入强制消息"不要再调用工具，直接回答"，最后做一次不带工具定义的调用。<br><br>
+          <b>四工具协同</b> — search_knowledge 语义模糊搜索、search_wiki 精确文件读取、search_data 结构化数据查询、search_web 实时网络搜索。系统提示词指导 LLM 同一轮内并行调用多个工具覆盖不同维度。
+        </div>
+        <div class="glass-card" data-od-id="card-agent"><strong>Agent 运行时</strong>
+          GaokaoAgent 串联消息构建器、工具执行器、ChatLoop 三个组件。消息构建每次叠三层（系统提示词→SQLite 历史含 tool_calls 反序列化→当前提问），全历史平铺；工具执行器四个工具统一实现 Tool 接口，signal 穿透底层；ChatLoop 每轮 SSE 流式调 LLM，tool_calls 跨 chunk 累积拼接，最多 5 轮超限强制汇总。<br><br>
+          <b>边界保护</b> — AbortSignal 贯全线，取消后从消息数组重建不丢数据；工具失败包装为错误字符串不中断；结果超一万字截断；存库前过滤特殊标签；消息保存用显式事务。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Three.js -->
+  <script type="importmap">
+    { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+  </script>
+
+  <!-- Title typing -->
+  <script>
+    (function () {
+      var text = '致敬，张雪峰老师';
+      var target = document.getElementById('type-target');
+      var i = 0;
+      function type() {
+        if (i < text.length) {
+          target.textContent += text.charAt(i);
+          i++;
+          setTimeout(type, 100);
+        }
+      }
+      setTimeout(type, 600);
+    })();
+  </script>
+
+  <!-- Three.js Particles -->
+  <script type="module">
+    import * as THREE from 'three';
+
+    const tagEl  = null;
+    const hintEl = null;
+
+    // Canvas
+    const canvas = document.createElement('canvas');
+    Object.assign(canvas.style, {
+      position: 'fixed', top: '0', left: '0',
+      width: '100%', height: '100%',
+      zIndex: '0', pointerEvents: 'none',
+    });
+    document.body.insertBefore(canvas, document.body.firstChild);
+
+    let W = window.innerWidth, H = window.innerHeight;
+
+    const scene    = new THREE.Scene();
+    const camera   = new THREE.PerspectiveCamera(55, W / H, 0.1, 1000);
+    camera.position.z = 130;
+
+    const renderer = new THREE.WebGLRenderer({
+      canvas, alpha: true, antialias: true, preserveDrawingBuffer: true,
+    });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(W, H);
+    renderer.setClearColor(0x000000, 0);
+
+    // Particle buffers
+    const N = 8000;
+    const pos  = new Float32Array(N * 3);
+    const base = new Float32Array(N * 3);
+    const src  = new Float32Array(N * 3);
+    const dst  = new Float32Array(N * 3);
+    const del  = new Float32Array(N);
+    const col  = new Float32Array(N * 3);
+
+    const repX  = new Float32Array(N);
+    const repY  = new Float32Array(N);
+    const repVX = new Float32Array(N);
+    const repVY = new Float32Array(N);
+    const MAX_DEL = 0.38;
+
+    // Colour palette — warm neon
+    const PALETTE = [
+      [0.50, 0.70, 1.00],
+      [0.55, 0.75, 1.00],
+      [0.45, 0.65, 1.00],
+      [0.60, 0.80, 1.00],
+    ];
+
+    for (let i = 0; i < N; i++) {
+      const x = (Math.random() - 0.5) * 300;
+      const y = (Math.random() - 0.5) * 200;
+      const z = (Math.random() - 0.5) * 100;
+      pos[i*3]=x; pos[i*3+1]=y; pos[i*3+2]=z;
+      base[i*3]=x; base[i*3+1]=y; base[i*3+2]=z;
+      dst[i*3]=x; dst[i*3+1]=y; dst[i*3+2]=z;
+      del[i] = Math.random() * MAX_DEL;
+      const c = PALETTE[Math.floor(Math.random() * PALETTE.length)];
+      col[i*3]=c[0]; col[i*3+1]=c[1]; col[i*3+2]=c[2];
+    }
+
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
+
+    function createCircleTexture(size, color, alpha) {
+      const c = document.createElement('canvas');
+      c.width = size; c.height = size;
+      const ctx = c.getContext('2d');
+      ctx.beginPath();
+      ctx.arc(size/2, size/2, size/2, 0, Math.PI*2);
+      ctx.fillStyle = color;
+      ctx.fill();
+      const data = ctx.getImageData(0, 0, size, size);
+      for (let i = 0; i < data.data.length; i += 4) {
+        data.data[i+3] = data.data[i+3] > 128 ? alpha : 0;
+      }
+      ctx.putImageData(data, 0, 0);
+      return new THREE.CanvasTexture(c);
+    }
+    const circleTex = createCircleTexture(64, '#ffffff', 255);
+
+    const mat = new THREE.PointsMaterial({
+      size: 1.0, map: circleTex, vertexColors: true,
+      sizeAttenuation: true, transparent: true, opacity: 0.85,
+      depthWrite: false, blending: THREE.NormalBlending,
+    });
+
+    const points = new THREE.Points(geo, mat);
+    scene.add(points);
+
+    // Text sampling
+    function sampleText(text, fontSize) {
+      const ow = 800, oh = 360;
+      const oc = document.createElement('canvas');
+      oc.width = ow; oc.height = oh;
+      const ctx = oc.getContext('2d');
+      ctx.clearRect(0, 0, ow, oh);
+      ctx.fillStyle = '#ffffff';
+      ctx.font = `bold ${fontSize}px "PingFang SC","Microsoft YaHei","Heiti SC","Noto Sans SC",sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(text, ow/2, oh/2);
+      const data = ctx.getImageData(0, 0, ow, oh).data;
+      const out = [];
+      const step = 5;
+      for (let py = 0; py < oh; py += step) {
+        for (let px = 0; px < ow; px += step) {
+          if (data[((py*ow+px)*4)+3] > 128) {
+            out.push([(px/ow - 0.5)*320, -(py/oh - 0.5)*125]);
+          }
+        }
+      }
+      return out;
+    }
+
+    let zhangPts = null, gaoPts = null;
+    let _fontsReady = false;
+    function initTextShapes() {
+      if (_fontsReady) return;
+      _fontsReady = true;
+      zhangPts = sampleText('张雪峰', 135);
+      gaoPts = sampleText('高考', 195);
+    }
+    document.fonts.ready.then(initTextShapes);
+    setTimeout(initTextShapes, 2000);
+
+    function pointsToDst(pts) {
+      if (!pts || pts.length === 0) {
+        for (let i = 0; i < N; i++) {
+          dst[i*3] = (Math.random() - 0.5)*300;
+          dst[i*3+1] = (Math.random() - 0.5)*200;
+          dst[i*3+2] = (Math.random() - 0.5)*100;
+        }
+        return;
+      }
+      const shuffled = pts.slice().sort(() => Math.random() - 0.5);
+      for (let i = 0; i < N; i++) {
+        const p = shuffled[i % shuffled.length];
+        dst[i*3] = p[0] + (Math.random()-0.5)*2.0;
+        dst[i*3+1] = p[1] + (Math.random()-0.5)*2.0;
+        dst[i*3+2] = (Math.random()-0.5)*10;
+      }
+    }
+
+    // State machine
+    const STATE_LABELS = ['', '张雪峰', '', '高考'];
+    const HOLD_TIMES   = [3.5, 5.0, 3.0, 5.0];
+    const TRANS_DUR    = 3.2;
+
+    let stateIdx = 0, stateTimer = 0.0, transitioning = false;
+    let lerpT = 0.0, floatBlend = 1.0, animTime = 0;
+    const FLOAT_FADE_DUR = 0.6;
+
+    function shapeForState(s) {
+      if (s === 1) return zhangPts;
+      if (s === 3) return gaoPts;
+      return null;
+    }
+
+    function beginTransition() {
+      stateIdx = (stateIdx + 1) % 4;
+      src.set(base);
+      pointsToDst(shapeForState(stateIdx));
+      lerpT = 0.0;
+      transitioning = true;
+      stateTimer = 0.0;
+      const label = STATE_LABELS[stateIdx];
+      if (label && tagEl) {
+        tagEl.textContent = label;
+        tagEl.style.opacity = '0.5';
+      } else if (tagEl) {
+        tagEl.style.opacity = '0';
+      }
+    }
+
+    // Mouse
+    let mouseNX = 0, mouseNY = 0, mouseRawX = 0, mouseRawY = 0;
+    const raycaster = new THREE.Raycaster();
+    const zPlane = new THREE.Plane(new THREE.Vector3(0,0,1), 0);
+    const mWorld = new THREE.Vector3();
+    const ndcMouse = new THREE.Vector2();
+
+    window.addEventListener('mousemove', (e) => {
+      mouseNX = (e.clientX/W - 0.5)*2;
+      mouseNY = (e.clientY/H - 0.5)*2;
+      mouseRawX = e.clientX;
+      mouseRawY = e.clientY;
+    });
+    window.addEventListener('mouseleave', () => {
+      mouseRawX = -9999; mouseRawY = -9999;
+    });
+    window.addEventListener('touchmove', (e) => {
+      if (e.touches.length) {
+        mouseNX = (e.touches[0].clientX/W - 0.5)*2;
+        mouseNY = (e.touches[0].clientY/H - 0.5)*2;
+        mouseRawX = e.touches[0].clientX;
+        mouseRawY = e.touches[0].clientY;
+      }
+    }, { passive: true });
+    window.addEventListener('touchend', () => {
+      mouseRawX = -9999; mouseRawY = -9999;
+    });
+
+    const REP_RADIUS = 55, REP_FORCE = 90, SPRING_K = 10, DAMP_C = 8;
+
+    function easeQuintic(t) {
+      return t < 0.5 ? 16*t*t*t*t*t : 1 - Math.pow(-2*t+2,5)/2;
+    }
+
+    const clock = new THREE.Clock();
+    let canvasFadedIn = false;
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      let dt = Math.min(clock.getDelta(), 0.05);
+      animTime += dt;
+      stateTimer += dt;
+
+      if (!transitioning && stateTimer > HOLD_TIMES[stateIdx]) {
+        beginTransition();
+      }
+
+      if (transitioning) {
+        lerpT += dt / TRANS_DUR;
+        const done = lerpT >= 1.0;
+        if (done) {
+          lerpT = 1.0;
+          transitioning = false;
+          floatBlend = 0.0;
+        }
+        for (let i = 0; i < N; i++) {
+          const range = 1.0 - del[i];
+          const localT = Math.max(0, Math.min(1, (lerpT - del[i]) / range));
+          const e = easeQuintic(localT);
+          base[i*3] = src[i*3] + (dst[i*3] - src[i*3]) * e;
+          base[i*3+1] = src[i*3+1] + (dst[i*3+1] - src[i*3+1]) * e;
+          base[i*3+2] = src[i*3+2] + (dst[i*3+2] - src[i*3+2]) * e;
+        }
+      } else {
+        floatBlend = Math.min(1.0, floatBlend + dt / FLOAT_FADE_DUR);
+        const isScatter = (stateIdx % 2 === 0);
+        for (let i = 0; i < N; i++) {
+          const phase = i * 0.05;
+          if (isScatter) {
+            base[i*3]   = dst[i*3]   + Math.sin(animTime*0.18 + phase)*1.8*floatBlend;
+            base[i*3+1] = dst[i*3+1] + Math.cos(animTime*0.14 + phase*1.3)*1.8*floatBlend;
+            base[i*3+2] = dst[i*3+2] + Math.sin(animTime*0.30 + phase*0.7)*8.0*floatBlend;
+          } else {
+            base[i*3]   = dst[i*3]   + Math.sin(animTime*0.50 + phase)*0.30*floatBlend;
+            base[i*3+1] = dst[i*3+1] + Math.cos(animTime*0.40 + phase)*0.30*floatBlend;
+            base[i*3+2] = dst[i*3+2] + Math.sin(animTime*0.60 + phase)*1.2*floatBlend;
+          }
+        }
+      }
+
+      // Repulsion
+      ndcMouse.set((mouseRawX/W)*2-1, -(mouseRawY/H)*2+1);
+      raycaster.setFromCamera(ndcMouse, camera);
+      raycaster.ray.intersectPlane(zPlane, mWorld);
+      const mwx = mWorld.x, mwy = mWorld.y;
+
+      for (let i = 0; i < N; i++) {
+        const bx = base[i*3], by = base[i*3+1];
+        const dx = bx - mwx, dy = by - mwy;
+        const d2 = dx*dx + dy*dy;
+        if (d2 < REP_RADIUS*REP_RADIUS && d2 > 0.001) {
+          const d = Math.sqrt(d2);
+          const fall = 1.0 - d/REP_RADIUS;
+          repVX[i] += (dx/d)*fall*fall*REP_FORCE*dt;
+          repVY[i] += (dy/d)*fall*fall*REP_FORCE*dt;
+        }
+        repVX[i] += (-SPRING_K*repX[i] - DAMP_C*repVX[i])*dt;
+        repVY[i] += (-SPRING_K*repY[i] - DAMP_C*repVY[i])*dt;
+        repX[i] += repVX[i]*dt;
+        repY[i] += repVY[i]*dt;
+        pos[i*3] = base[i*3] + repX[i];
+        pos[i*3+1] = base[i*3+1] + repY[i];
+        pos[i*3+2] = base[i*3+2];
+      }
+
+      geo.attributes.position.needsUpdate = true;
+      renderer.render(scene, camera);
+
+      if (!canvasFadedIn) {
+        canvasFadedIn = true;
+        canvas.style.transition = 'opacity 0.6s ease';
+        canvas.style.opacity = '1';
+      }
+
+      camera.position.x += (mouseNX*8 - camera.position.x)*0.04;
+      camera.position.y += (-mouseNY*5 - camera.position.y)*0.04;
+      camera.lookAt(0, 0, 0);
+    }
+
+    window.addEventListener('resize', () => {
+      W = window.innerWidth; H = window.innerHeight;
+      camera.aspect = W / H;
+      camera.updateProjectionMatrix();
+      renderer.setSize(W, H);
+      zhangPts = sampleText('张雪峰', 135);
+      gaoPts = sampleText('高考', 195);
+    });
+
+    function startFirstTransition() {
+      if (!zhangPts || !gaoPts) {
+        setTimeout(startFirstTransition, 100);
+        return;
+      }
+      stateTimer = HOLD_TIMES[0] + 0.1;
+    }
+    setTimeout(startFirstTransition, 300);
+
+    animate();
+  </script>
+</body>
+</html>
