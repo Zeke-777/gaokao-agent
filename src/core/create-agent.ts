@@ -7,14 +7,12 @@ import { EmbeddingService } from "./embedding";
 import { KnowledgeSearchTool } from "../tools/search-knowledge";
 import { SearchWikiTool } from "../tools/search-wiki";
 import { WebSearchTool } from "../tools/web-search";
-import { SearchDataTool } from "../tools/search-data";
 import { config } from "./config";
 
 export function createAgent(): GaokaoAgent {
   const qdrant = new QdrantClient(config.qdrantUrl, config.stagingRoot);
   const embed = new EmbeddingService(config.embeddingUrl, config.embeddingModel, config.embeddingApiKey);
   const searchWiki = new SearchWikiTool("./wiki");
-  const searchData = new SearchDataTool();
 
   return new GaokaoAgent({
     llmApiKey: config.llmApiKey,
@@ -24,10 +22,6 @@ export function createAgent(): GaokaoAgent {
       new KnowledgeSearchTool(qdrant, embed),
       new WebSearchTool(config.searchProvider, config.searchApiKey),
       searchWiki,
-      searchData,
     ],
-    onClose: () => {
-      searchData.close();
-    },
   });
 }

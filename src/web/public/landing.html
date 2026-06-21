@@ -225,16 +225,16 @@
           原始素材来自 wiki 目录 Markdown，经 sync 脚本同步 staging，按标题切分，超 1200 字符按双换行再切，40 字符以下丢弃。DashScope embedding（1024 维）写入 Qdrant。<br><br>
           <b>五集合隔离</b> — schools、majors、policies_rules、province_data、style_cases，共 10309 个向量。LLM 必须指定集合搜索，按 sourceFile 去重并回填完整原始文档。配套 search_wiki 工具按名索引、路径精确读取。
         </div>
-        <div class="glass-card" data-od-id="card-db"><strong>录取数据库</strong>
-          SQLite（gaokao_2025.db），三张表：school_scores（2.7 万条）、major_scores（87 万条）、province_lines（94 条），覆盖 990 所院校和全国 30+ 省级行政区。<br><br>
-          <b>数据维度</b> — 最低分、平均分、最高分、最低位次、招生计划数、控制线。索引建在 school、province、(school,province) 等高频路径，专业表额外加 major 模糊匹配索引。
+        <div class="glass-card" data-od-id="card-db"><strong>实时数据获取</strong>
+          权威录取数据通过 search_web 实时搜索互联网获取，覆盖教育考试院官网、高校招生网、高考100、掌上高考等多个数据源。<br><br>
+          <b>多源交叉验证</b> — LLM 自动从 3-5 个来源获取数据并逐条评估可靠性（★☆☆☆☆~★★★★★），明确标注哪条是官方数据、哪条是自媒体预估。同时提醒用户志愿填报以《招生考试之友》和教育考试院官网为准。
         </div>
         <div class="glass-card" data-od-id="card-orch"><strong>工作流编排</strong>
           ReAct 循环：用户提问后 LLM 流式思考并决定是否调用工具。tool_calls 逐个执行，结果注入对话历史，进入下一轮。最多 10 轮，超限后注入强制消息"不要再调用工具，直接回答"，最后做一次不带工具定义的调用。<br><br>
-          <b>四工具协同</b> — search_knowledge 语义模糊搜索、search_wiki 精确文件读取、search_data 结构化数据查询、search_web 实时网络搜索。系统提示词指导 LLM 同一轮内并行调用多个工具覆盖不同维度。
+          <b>三工具协同</b> — search_knowledge 语义模糊搜索、search_wiki 精确文件读取、search_web 实时网络搜索权威录取数据。系统提示词指导 LLM 同一轮内并行调用多个工具覆盖不同维度，多源交叉验证。
         </div>
         <div class="glass-card" data-od-id="card-agent"><strong>Agent 运行时</strong>
-          GaokaoAgent 串联消息构建器、工具执行器、ChatLoop 三个组件。消息构建每次叠三层（系统提示词→SQLite 历史含 tool_calls 反序列化→当前提问），全历史平铺；工具执行器四个工具统一实现 Tool 接口，signal 穿透底层；ChatLoop 每轮 SSE 流式调 LLM，tool_calls 跨 chunk 累积拼接，最多 10 轮超限强制汇总。<br><br>
+          GaokaoAgent 串联消息构建器、工具执行器、ChatLoop 三个组件。消息构建每次叠三层（系统提示词→SQLite 历史含 tool_calls 反序列化→当前提问），全历史平铺；工具执行器三个工具统一实现 Tool 接口，signal 穿透底层；ChatLoop 每轮 SSE 流式调 LLM，tool_calls 跨 chunk 累积拼接，最多 10 轮超限强制汇总。<br><br>
           <b>边界保护</b> — AbortSignal 贯全线，取消后从消息数组重建不丢数据；工具失败包装为错误字符串不中断；结果超一万字截断；存库前过滤特殊标签；消息保存用显式事务。
         </div>
       </div>
