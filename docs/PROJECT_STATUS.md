@@ -1,12 +1,12 @@
 # 高考志愿 Agent 原型 — 项目状态
 
-> 版本: v1.1.0 | 日期: 2026-06-21 | 状态: 功能完整
+> 版本: v1.2.0 | 日期: 2026-06-21 | 状态: 功能完整
 
 ---
 
 ## 一、项目定位
 
-张雪峰风格的高考志愿填报 AI Agent 原型。核心思路：**知识库检索 + 实时搜索 + Wiki 深度阅读 + 大模型生成**。
+张雪峰风格的高考志愿填报 AI Agent 原型。核心思路：**知识库检索 + 实时联网搜索权威录取数据 + Wiki 深度阅读 + 大模型生成**。
 
 ## 二、技术栈
 
@@ -48,7 +48,6 @@ agent-prototype/
 │   ├── tools/
 │   │   ├── types.ts                ← Tool 接口 + ToolDefinition
 │   │   ├── search-knowledge.ts     ← 知识库检索（5集合，topK=5）
-│   │   ├── search-data.ts          ← 录取数据库查询（school/major/line）
 │   │   ├── search-wiki.ts          ← Wiki 文件读取 + name index 自动歧义解析
 │   │   ├── web-search.ts           ← Web 搜索（Tavily/Brave）
 │   │   ├── wiki-resolve.ts         ← [[链接]] 栈式解析（2分支）
@@ -74,7 +73,7 @@ agent-prototype/
 │   └── config/
 │       ├── qdrant.yaml
 │       └── collections.template.json
-├── sqlite/                         ← 录取数据库脚本（抓取/导入/初始化/查询）
+├── sqlite/                         ← 录取数据库脚本（已弃用，数据改为 search_web 联网获取）
 ├── data/                           ← 运行时数据 (gitignore)
 ├── docs/
 │   ├── PROJECT_STATUS.md           ← 本文件
@@ -89,7 +88,7 @@ agent-prototype/
 ```
 GaokaoAgent (~42行)
 ├── buildMessages()   → 系统提示 + 历史加载
-├── ChatLoop.run()    → 多轮循环（max 5）
+├── ChatLoop.run()    → 多轮循环（max 10）
 │   ├── LLMClient      → LLM API
 │   └── ToolExecutor   → 工具查找+执行
 ├── SessionRepo       → 会话 CRUD
@@ -103,8 +102,7 @@ GaokaoAgent (~42行)
 | 工具 | 功能 | 参数 |
 |------|------|------|
 | `search_knowledge` | 5 集合语义检索，返回完整文档 | query, topK(默认5), collections |
-| `search_data` | SQLite 录取数据库查询（2024-2025） | query_type(school/major/line), school, province, major, year, limit |
-| `search_web` | Tavily/Brave 实时搜索 | query, limit |
+| `search_web` | 权威录取数据主入口 — 实时搜索互联网（教育考试院、高校招生网、高考100 等），多源交叉验证 | query, limit |
 | `search_wiki` | wiki 文件读取 + name index 自动歧义 | path（路径或文件名） |
 
 ### 4.3 Wiki [[链接]] 解析
@@ -167,8 +165,8 @@ bun run cli
 
 ```
 agent.db          — sessions, messages（会话/消息，2 表）
-gaokao_2025.db    — 录取数据（87万+ 条）
 ```
+> 录取数据不再存储本地，改为 search_web 实时联网获取。
 
 ## 八、向量库
 
@@ -311,3 +309,23 @@ Agent 解耦重构 + 架构规范化。详见 git log。
 
 ### 构建
 10. **package.json**：新增 `build` 脚本（vite build），新增 `public/landing.html`
+
+## 十六、v1.2.0 主要变更 (2026-06-21)
+
+### 架构决策
+1. **移除 search_data 工具**：删除 SearchDataTool（370 行），录取数据不再走本地 SQLite，改为 search_web 联网实时搜索。理由：数据库数据过时（科类名不统一、覆盖不全），维护成本远超收益
+2. **search_web 接管录取数据**：成为权威数据唯一入口，系统提示词重构为 search_web 专属规则（多源交叉验证、投档线≠专业线警告、可靠性标注）
+
+### 系统提示词强化（3 层 LLM 引导）
+3. **事前 — 核心认知 banner**："院校投档线 ≠ 专业录取线"置于工具列表最前
+4. **事中 — 强制规则 + 反面教材**：明确触发词→必须双查，用具体数字演示只查投档线的误导后果
+5. **事后 — 结果引导**：每次查询结果末尾追加 ⚠️ 提醒，区分控制线/投档线/专业线
+
+### Bug 修复
+6. **escapeLikePattern SQLite 不兼容**：`[...]` 包裹改为 `\%` `\_` + `ESCAPE '\'`，修复含 `%`/`_` 文本的 LIKE 匹配
+7. **min_score/min_rank null 显示**：`?? "-"` 兜底，避免渲染 "null分"
+8. **subject 自动回退**：LLM 传错科类名（如河南传"物理类"但 DB 存"理科"）时自动去掉 subject 重试
+
+### 配置
+9. **maxRounds**：5→10，给 LLM 更多工具调用空间
+10. **Landing 数据同步**：wiki 1314→1316，school_scores 1.6万→2.7万，major_scores 46万→87万，院校数 1014→990
