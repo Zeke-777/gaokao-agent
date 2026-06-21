@@ -230,18 +230,20 @@ export default function ChatArea() {
                 </details>
               )}
               <div className={`msg ${msg.role}`}>
-                <div className="msg-bubble">
-                  {msg.role === "assistant" ? (
-                    hasSpecialTags(msg.content) ? (
-                      <span style={{whiteSpace: 'pre-wrap'}}>{stripSpecialTags(msg.content)}</span>
-                    ) : (
-                      <Markdown remarkPlugins={[remarkGfm]}>{msg.content}</Markdown>
-                    )
-                  ) : msg.content}
+                <div>
+                  <div className="msg-bubble">
+                    {msg.role === "assistant" ? (
+                      hasSpecialTags(msg.content) ? (
+                        <span style={{whiteSpace: 'pre-wrap'}}>{stripSpecialTags(msg.content)}</span>
+                      ) : (
+                        <Markdown remarkPlugins={[remarkGfm]}>{msg.content}</Markdown>
+                      )
+                    ) : msg.content}
+                  </div>
+                  {msg.role === "assistant" && msg.content && !msg.content.startsWith("❌") && msg.content !== "（已取消）" && (
+                    <div className="msg-disclaimer">内容由 AI 生成，仅供参考</div>
+                  )}
                 </div>
-                {msg.role === "assistant" && msg.content && !msg.content.startsWith("❌") && msg.content !== "（已取消）" && (
-                  <div className="msg-disclaimer">内容由 AI 生成，仅供参考</div>
-                )}
               </div>
             </div>
           ))}
