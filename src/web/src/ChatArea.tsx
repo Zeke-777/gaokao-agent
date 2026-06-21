@@ -10,7 +10,8 @@ export default function ChatArea() {
   const { status, sessionId, messages, progress, streamingContent, input } = state;
   const bottomRef = useRef<HTMLDivElement>(null);
   const chatBodyRef = useRef<HTMLDivElement>(null);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const welcomeTextareaRef = useRef<HTMLTextAreaElement>(null);
+  const chatTextareaRef = useRef<HTMLTextAreaElement>(null);
   const abortRef = useRef<AbortController | null>(null);
   const activeSidRef = useRef<string | null>(null);
   const [showScrollBtn, setShowScrollBtn] = useState(false);
@@ -20,7 +21,7 @@ export default function ChatArea() {
 
   // 自适应高度
   const adjustHeight = useCallback(() => {
-    const el = textareaRef.current;
+    const el = chatTextareaRef.current || welcomeTextareaRef.current;
     if (!el) return;
     el.style.height = 'auto';
     el.style.height = Math.min(el.scrollHeight, 150) + 'px';
@@ -186,7 +187,7 @@ export default function ChatArea() {
         </div>
         <form onSubmit={handleSubmit} className="input-form welcome-input">
           <textarea
-            ref={textareaRef}
+            ref={welcomeTextareaRef}
             value={input}
             onChange={(e) => dispatch({ type: "SET_INPUT", value: e.currentTarget.value })}
             onKeyDown={(e) => {
@@ -293,7 +294,7 @@ export default function ChatArea() {
       {/* Chat form — only in chat mode */}
       {hasContent && <form onSubmit={handleSubmit} className="input-form chat-input">
         <textarea
-          ref={textareaRef}
+          ref={chatTextareaRef}
           value={input}
           onChange={(e) => dispatch({ type: "SET_INPUT", value: e.currentTarget.value })}
           onKeyDown={(e) => {
