@@ -239,6 +239,9 @@ export default function ChatArea() {
                     )
                   ) : msg.content}
                 </div>
+                {msg.role === "assistant" && msg.content && !msg.content.startsWith("❌") && msg.content !== "（已取消）" && (
+                  <div className="msg-disclaimer">内容由 AI 生成，仅供参考</div>
+                )}
               </div>
             </div>
           ))}
