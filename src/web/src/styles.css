@@ -143,6 +143,7 @@ body{
 .sidenav.expanded .sidenav-bottom{
   align-items:stretch;padding:var(--space-3) var(--space-3);
 }
+.sidenav-middle{flex:1;min-height:0}
 .sidenav-top{padding-top:var(--space-4)}
 .sidenav-bottom{margin-top:auto;padding-bottom:var(--space-4)}
 .sidenav-icon-btn{
