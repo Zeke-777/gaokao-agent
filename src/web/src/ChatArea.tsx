@@ -15,6 +15,8 @@ export default function ChatArea() {
   const activeSidRef = useRef<string | null>(null);
   const [showScrollBtn, setShowScrollBtn] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [typedLen, setTypedLen] = useState(0);
+  const welcomeText = "有什么需要我来分析的？";
 
   // 自适应高度
   const adjustHeight = useCallback(() => {
@@ -167,12 +169,20 @@ export default function ChatArea() {
   const isBusy = status === "busy";
   const hasContent = messages.length > 0 || progress.length > 0 || streamingContent.length > 0 || isBusy;
 
+  // 欢迎文字逐字打字动效
+  useEffect(() => {
+    if (!hasContent && typedLen < welcomeText.length) {
+      const t = setTimeout(() => setTypedLen((n) => n + 1), 100);
+      return () => clearTimeout(t);
+    }
+  }, [typedLen, hasContent]);
+
   return (
     <div className="chat-area">
       {/* Welcome content — always in DOM, fades out */}
       <div className={`welcome-layer ${hasContent ? "hidden" : ""}`}>
         <div className="welcome">
-          <h1 className="welcome-title">有什么需要我来分析的？</h1>
+          <h1 className="welcome-title">{welcomeText.slice(0, typedLen)}{typedLen < welcomeText.length && <span className="cursor">▊</span>}</h1>
         </div>
         <form onSubmit={handleSubmit} className="input-form welcome-input">
           <textarea
