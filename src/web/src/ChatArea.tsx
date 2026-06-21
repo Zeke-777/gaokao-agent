@@ -182,7 +182,7 @@ export default function ChatArea() {
       {/* Welcome content — always in DOM, fades out */}
       <div className={`welcome-layer ${hasContent ? "hidden" : ""}`}>
         <div className="welcome">
-          <h1 className="welcome-title">{welcomeText.slice(0, typedLen)}{typedLen < welcomeText.length && <span className="cursor">▊</span>}</h1>
+          <h1 className="welcome-title">{welcomeText.slice(0, typedLen)}{typedLen < welcomeText.length && <span className="cursor" />}</h1>
         </div>
         <form onSubmit={handleSubmit} className="input-form welcome-input">
           <textarea
@@ -264,7 +264,7 @@ export default function ChatArea() {
                 ) : (
                   <Markdown remarkPlugins={[remarkGfm]}>{streamingContent}</Markdown>
                 )}
-                <span className="cursor">▊</span>
+                <span className="cursor" />
               </div>
             </div>
           )}

@@ -357,7 +357,15 @@ body{
 .msg.assistant .msg-bubble hr{
   border:none;border-top:1px solid var(--border);margin:16px 0;
 }
-.cursor{animation:blink 1s step-end infinite;color:var(--fg);font-weight:600}
+.cursor {
+  display: inline-block;
+  width: 4px;
+  height: 1.06em;
+  background: var(--fg);
+  margin-left: 3px;
+  vertical-align: text-bottom;
+  animation: blink 0.8s step-end infinite;
+}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
 
 /* ===== Progress / Tool Calls ===== */
