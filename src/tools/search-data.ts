@@ -4,11 +4,11 @@ import * as path from "node:path";
 import type { Tool, ToolDefinition } from "./types";
 
 /**
- * 转义 SQL LIKE 通配符
- * 将 %、_、[ 等特殊字符转义为普通字符
+ * 转义 SQLite LIKE 通配符 — 使用 ESCAPE '\' 语法
+ * 将 % 和 _ 转义为 \% 和 \_（配合 SQL 中的 ESCAPE '\' 子句）
  */
 function escapeLikePattern(pattern: string): string {
-  return pattern.replace(/[%_[]/g, (char) => `[${char}]`);
+  return pattern.replace(/[%_]/g, (char) => `\\${char}`);
 }
 
 /**
@@ -155,11 +155,11 @@ export class SearchDataTool implements Tool {
       const clauses: string[] = ["1=1"];
       const params: (string | number)[] = [];
       if (school) {
-        clauses.push(useLike ? "school LIKE ?" : "school = ?");
+        clauses.push(useLike ? "school LIKE ? ESCAPE '\\'" : "school = ?");
         params.push(useLike ? `%${escapeLikePattern(school)}%` : school);
       }
       if (province) {
-        clauses.push(useLike ? "province LIKE ?" : "province = ?");
+        clauses.push(useLike ? "province LIKE ? ESCAPE '\\'" : "province = ?");
         params.push(useLike ? `%${escapeLikePattern(province)}%` : province);
       }
       if (year) {
@@ -191,7 +191,7 @@ export class SearchDataTool implements Tool {
 
     const lines = rows.map(
       (r) =>
-        `${r.year}年 | ${r.school} | ${r.province} | ${r.batch} | ${r.subject} | ${r.min_score}分 | ${r.min_rank}位 | 计划${r.plan_count ?? "-"}人`,
+        `${r.year}年 | ${r.school} | ${r.province} | ${r.batch} | ${r.subject} | ${r.min_score ?? "-"}分 | ${r.min_rank ?? "-"}位 | 计划${r.plan_count ?? "-"}人`,
     );
     return `【院校录取线】共 ${rows.length} 条${fuzzyNote}\n${lines.join("\n")}`;
   }
@@ -214,15 +214,15 @@ export class SearchDataTool implements Tool {
       const clauses: string[] = ["1=1"];
       const params: (string | number)[] = [];
       if (school) {
-        clauses.push(useLike ? "school LIKE ?" : "school = ?");
+        clauses.push(useLike ? "school LIKE ? ESCAPE '\\'" : "school = ?");
         params.push(useLike ? `%${escapeLikePattern(school)}%` : school);
       }
       if (province) {
-        clauses.push(useLike ? "province LIKE ?" : "province = ?");
+        clauses.push(useLike ? "province LIKE ? ESCAPE '\\'" : "province = ?");
         params.push(useLike ? `%${escapeLikePattern(province)}%` : province);
       }
       if (major) {
-        clauses.push("major LIKE ?");
+        clauses.push("major LIKE ? ESCAPE '\\'");
         params.push(`%${escapeLikePattern(major)}%`);
       }
       if (year) {
@@ -254,7 +254,7 @@ export class SearchDataTool implements Tool {
     result += rows
       .map(
         (r) =>
-          `${r.year}年 | ${r.school} | ${r.province} | ${r.major} | ${r.min_score}分 | ${r.min_rank}位 | 计划${r.plan_count ?? "-"}人`,
+          `${r.year}年 | ${r.school} | ${r.province} | ${r.major} | ${r.min_score ?? "-"}分 | ${r.min_rank ?? "-"}位 | 计划${r.plan_count ?? "-"}人`,
       )
       .join("\n");
 
