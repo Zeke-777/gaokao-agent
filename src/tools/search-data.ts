@@ -57,7 +57,7 @@ export class SearchDataTool implements Tool {
           subject: {
             type: "string",
             description:
-              "科类筛选，如：物理类、历史类、理科、文科、综合改革。不传则返回所有科类",
+              "科类筛选。⚠️ 各省命名不同：传统高考省份（河南、四川、山西等）用'理科'/'文科'；新高考省份（山东、广东、河北等）用'物理类'/'历史类'；北京/上海/浙江等用'综合改革'。不确定省份用哪种命名时，不要传此参数，让结果包含所有科类后自行判断。",
           },
           year: {
             type: "number",
@@ -151,7 +151,8 @@ export class SearchDataTool implements Tool {
     }
 
     // 构建 WHERE 子句，useLike 控制 school/province 用精确还是模糊匹配
-    const buildClauses = (useLike: boolean) => {
+    // skipSubject: true 时不加 subject 过滤（用于 subject 回退）
+    const buildClauses = (useLike: boolean, skipSubject = false) => {
       const clauses: string[] = ["1=1"];
       const params: (string | number)[] = [];
       if (school) {
@@ -166,7 +167,7 @@ export class SearchDataTool implements Tool {
         clauses.push("year = ?");
         params.push(year);
       }
-      if (subject) {
+      if (subject && !skipSubject) {
         clauses.push("subject = ?");
         params.push(subject);
       }
@@ -187,13 +188,23 @@ export class SearchDataTool implements Tool {
       }
     }
 
+    // 仍无结果且指定了 subject → 移除 subject 重试（不同省份科类命名不同）
+    let subjectNote = "";
+    if (rows.length === 0 && subject) {
+      const noSubject = buildClauses(false, true); // skipSubject
+      rows = this.db.query(`SELECT * FROM school_scores WHERE ${noSubject.where} ORDER BY year DESC, min_score DESC LIMIT ? OFFSET ?`).all(...noSubject.params, limit, offset) as any[];
+      if (rows.length > 0) {
+        subjectNote = `\n⚠️ subject="${subject}" 无匹配数据，已自动扩大为所有科类。不同省份科类命名不同（传统高考用'理科'/'文科'，新高考用'物理类'/'历史类'），不确定时请勿指定 subject 参数。`;
+      }
+    }
+
     if (rows.length === 0) return "未找到匹配的院校录取数据。";
 
     const lines = rows.map(
       (r) =>
         `${r.year}年 | ${r.school} | ${r.province} | ${r.batch} | ${r.subject} | ${r.min_score ?? "-"}分 | ${r.min_rank ?? "-"}位 | 计划${r.plan_count ?? "-"}人`,
     );
-    return `【院校录取线】共 ${rows.length} 条${fuzzyNote}\n${lines.join("\n")}`;
+    return `【院校录取线】共 ${rows.length} 条${fuzzyNote}${subjectNote}\n${lines.join("\n")}`;
   }
 
   /** 查询专业录取线 */
@@ -210,7 +221,7 @@ export class SearchDataTool implements Tool {
       return "请至少提供 school、province 或 major 参数";
     }
 
-    const buildClauses = (useLike: boolean) => {
+    const buildClauses = (useLike: boolean, skipSubject = false) => {
       const clauses: string[] = ["1=1"];
       const params: (string | number)[] = [];
       if (school) {
@@ -229,7 +240,7 @@ export class SearchDataTool implements Tool {
         clauses.push("year = ?");
         params.push(year);
       }
-      if (subject) {
+      if (subject && !skipSubject) {
         clauses.push("subject = ?");
         params.push(subject);
       }
@@ -248,9 +259,19 @@ export class SearchDataTool implements Tool {
       }
     }
 
+    // 仍无结果且指定了 subject → 移除 subject 重试
+    let subjectNote = "";
+    if (rows.length === 0 && subject) {
+      const noSubject = buildClauses(false, true);
+      rows = this.db.query(`SELECT * FROM major_scores WHERE ${noSubject.where} ORDER BY year DESC, min_score DESC LIMIT ? OFFSET ?`).all(...noSubject.params, limit, offset) as any[];
+      if (rows.length > 0) {
+        subjectNote = `\n⚠️ subject="${subject}" 无匹配数据，已自动扩大为所有科类。不同省份科类命名不同（传统高考用'理科'/'文科'，新高考用'物理类'/'历史类'），不确定时请勿指定 subject 参数。`;
+      }
+    }
+
     if (rows.length === 0) return "未找到匹配的专业录取数据。";
 
-    let result = `【专业录取线】共 ${rows.length} 条${fuzzyNote}\n`;
+    let result = `【专业录取线】共 ${rows.length} 条${fuzzyNote}${subjectNote}\n`;
     result += rows
       .map(
         (r) =>
