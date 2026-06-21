@@ -316,8 +316,9 @@ body{
   white-space:normal;
 }
 .msg-disclaimer{
-  font-size:var(--text-xs);color:var(--meta);text-align:left;
-  padding:var(--space-1) var(--space-1) 0;
+  font-size:var(--text-xs);color:var(--meta);
+  padding:var(--space-1) 0 var(--space-2);
+  max-width:85%;
   user-select:none;
 }
 
