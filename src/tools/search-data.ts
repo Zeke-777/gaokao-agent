@@ -30,7 +30,7 @@ export class SearchDataTool implements Tool {
     function: {
       name: "search_data",
       description:
-        "查询高考录取数据库（包含2024-2025年数据）。支持四种查询模式：1) 查询院校录取分数线；2) 查询专业录取分数线；3) 查询各省控制线（批次线）；4) 聚合排名（按学校或省份分组统计）。返回精确的分数、位次、招生计划、年份等数据。",
+        "查询高考录取数据库（2024-2025年数据）。支持四种模式：1) school=院校投档线（全校最低录取分，通常是最冷门专业的门槛）；2) major=专业录取线（具体专业的真实门槛，用户选专业时必须查）；3) line=各省控制线/批次线；4) aggregate=聚合排名。⚠️ 重要：当用户问'某校录取分/怎么样/多少分能上'时，school 和 major 必须同时查询——只查 school 拿到的是最冷门专业的分数，会严重低估真实录取难度。",
       parameters: {
         type: "object",
         properties: {
@@ -38,11 +38,12 @@ export class SearchDataTool implements Tool {
             type: "string",
             enum: ["school", "major", "line", "aggregate"],
             description:
-              "查询类型：school=院校录取线，major=专业录取线，line=各省控制线，aggregate=聚合排名",
+              "查询类型：school=院校投档线（全校最低分，不能代表专业难度）；major=专业录取线（具体专业的分数/位次，用户选专业时必须用）；line=各省控制线/批次线；aggregate=聚合排名",
           },
           school: {
             type: "string",
-            description: "学校名称，如：清华大学、郑州大学。支持模糊匹配",
+            description:
+              "学校名称，如：清华大学、郑州大学。支持模糊匹配。注意：仅查 school 模式拿到的是全校最低投档线（最冷门专业的分数），不能代表热门专业的真实录取门槛。用户问'某校怎么样/多少分'时，必须同时用 major 模式查专业线。",
           },
           province: {
             type: "string",
@@ -51,7 +52,7 @@ export class SearchDataTool implements Tool {
           major: {
             type: "string",
             description:
-              "专业名称或关键词（模糊匹配），仅 query_type=major 时有效，如：计算机、临床医学",
+              "专业名称或关键词（模糊匹配）。这是用户最终要报考的维度——院校投档线只是门槛，专业线才是真实竞争。用户提到任何专业方向（计算机、医学、金融、法学等）或问'某校怎么样'时，必须用 query_type='major' 查询。如：计算机、临床医学、电气工程",
           },
           subject: {
             type: "string",
@@ -349,9 +350,9 @@ export class SearchDataTool implements Tool {
   private getNudge(queryType: string): string {
     switch (queryType) {
       case "school":
-        return '\n\n💡 提示：以上为院校整体投档线。如需了解具体专业（如计算机、临床医学）的录取分数和位次，请使用 query_type="major" 进一步查询。';
+        return '\n\n⚠️ 重要提醒：以上是院校投档线（全校最低分），通常对应最冷门专业。热门专业（如计算机、临床医学、电气工程）的实际录取分往往高出 20-60 分。在给出结论前，请务必用 query_type="major" 查询用户目标专业的真实录取线，否则会严重低估录取难度。';
       case "line":
-        return '\n\n💡 提示：以上为省控制线（批次线），不是具体学校的录取线。如需查询某校录取分，请使用 query_type="school"；如需查专业录取分，请使用 query_type="major"。';
+        return '\n\n⚠️ 提醒：以上为省控制线（批次线），只是"有资格报"的门槛，不是任何学校实际录取分。请继续用 query_type="school" 和 query_type="major" 查询具体学校/专业的真实录取线。';
       case "aggregate":
         return '\n\n💡 提示：以上为聚合排名。如需查看某校的具体专业录取线，请使用 query_type="major" 并指定 school 和 major 参数。';
       default:
