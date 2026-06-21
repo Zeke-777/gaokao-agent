@@ -174,6 +174,7 @@ bun run cli
 │   ├── scripts/                # 数据导入脚本
 │   └── staging/                # 本地 staging 数据（不入 git）
 ├── wiki/                       # Obsidian 知识库
+├── docs/                       # 测试报告与质量评估
 └── .env.example                # 环境变量模板
 ```
 
@@ -200,6 +201,15 @@ bun run cli
 ### `search_web` — 联网搜索 & 录取数据查询
 
 通过 Tavily/Brave 搜索引擎实时获取权威录取数据（教育考试院官网、高校招生网、高考100、掌上高考等），多源交叉验证。支持按学校/专业/省份/年份搜索具体录取分、位次、招生计划，LLM 自动评估数据来源可靠性。**已替代旧版本地 SQLite 数据库方案。**
+
+---
+
+## 测试报告
+
+| 文档 | 说明 |
+|------|------|
+| [`docs/SYSTEM_TEST_v1.3.4.md`](docs/SYSTEM_TEST_v1.3.4.md) | 110 题全实测：通过率 100%，零故障，耗时/调用/分类统计 |
+| [`docs/QUALITY_REPORT_v1.3.4.md`](docs/QUALITY_REPORT_v1.3.4.md) | AI 回复质量评估：9 维度 × 110 篇，S 级 52.7%，来源标注/投档线区分是弱项 |
 
 ---
 
