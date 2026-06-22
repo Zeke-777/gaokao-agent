@@ -170,6 +170,48 @@
     .warn{background:#fee2e2;border:1px solid #fca5a5;border-radius:var(--radius-md);padding:12px 16px;margin:14px 0;font-size:13px;color:#991b1b;display:flex;gap:8px;align-items:flex-start}
     .tip .icon,.info .icon,.warn .icon{font-size:16px;flex-shrink:0;margin-top:1px}
 
+    /* ===== Terminal Guide ===== */
+    .terminal-guide{
+      background:linear-gradient(135deg,#f0f9ff,#e0f2fe);
+      border:2px solid #38bdf8;
+      border-radius:var(--radius-md);
+      padding:16px 20px;
+      margin:12px 0;
+      font-size:13px;
+      color:#0c4a6e;
+      line-height:1.9;
+    }
+    .terminal-guide strong{color:#0369a1}
+    .terminal-guide .steps{
+      display:flex;flex-direction:column;gap:6px;
+      margin:8px 0;
+    }
+    .terminal-guide .step{
+      display:flex;align-items:flex-start;gap:10px;
+    }
+    .terminal-guide .step-num{
+      flex-shrink:0;
+      width:26px;height:26px;
+      border-radius:50%;
+      background:#38bdf8;
+      color:#fff;
+      display:flex;align-items:center;justify-content:center;
+      font-weight:700;font-size:12px;
+    }
+    .terminal-guide .step-text{flex:1;padding-top:2px}
+    .terminal-guide .key{
+      display:inline-block;
+      background:#fff;
+      border:2px solid #38bdf8;
+      border-radius:4px;
+      padding:0 7px;
+      font-family:var(--font-mono);
+      font-size:12px;
+      font-weight:700;
+      color:#0369a1;
+      margin:0 2px;
+    }
+
     /* ===== Platform Tabs ===== */
     .tabs{
       display:flex;gap:3px;
@@ -326,12 +368,30 @@
     </div>
     <div class="tab-content active" data-os="win" data-tabs="bun">
       <div class="code-block"><span class="c2">powershell -c "irm bun.sh/install.ps1 | iex"</span></div>
-      <p style="font-size:12px;color:var(--muted)">右键开始菜单 → 终端 / PowerShell，粘贴运行</p>
+      <div class="terminal-guide">
+        <strong>📋 如何执行：</strong>
+        <div class="steps">
+          <div class="step"><span class="step-num">1</span><span class="step-text">右键点击屏幕左下角 <strong>开始菜单</strong>（田字图标）</span></div>
+          <div class="step"><span class="step-num">2</span><span class="step-text">选择 <strong>"终端"</strong> 或 <strong>"Windows PowerShell"</strong></span></div>
+          <div class="step"><span class="step-num">3</span><span class="step-text">点击上方代码块的 <strong>📋 复制</strong> 按钮，然后 <span class="key">Ctrl</span> + <span class="key">V</span> 粘贴到终端</span></div>
+          <div class="step"><span class="step-num">4</span><span class="step-text">按 <span class="key">Enter</span> 键执行命令</span></div>
+          <div class="step"><span class="step-num">5</span><span class="step-text">安装完成后<strong>关闭终端重新打开</strong>，输入 <code style="background:#e0f2fe;padding:1px 5px;border-radius:3px;font-family:var(--font-mono);font-weight:600">bun --version</code> 验证</span></div>
+        </div>
+      </div>
     </div>
     <div class="tab-content" data-os="mac" data-tabs="bun">
       <div class="code-block"><span class="c2">curl -fsSL https://bun.sh/install | bash</span></div>
+      <div class="terminal-guide">
+        <strong>📋 如何执行：</strong>
+        <div class="steps">
+          <div class="step"><span class="step-num">1</span><span class="step-text">按 <span class="key">⌘ Cmd</span> + <span class="key">Space</span>，输入 <strong>Terminal</strong> 并回车，打开终端</span></div>
+          <div class="step"><span class="step-num">2</span><span class="step-text">复制上方命令，<span class="key">⌘ Cmd</span> + <span class="key">V</span> 粘贴（或 <span class="key">Ctrl</span> + <span class="key">Shift</span> + <span class="key">V</span>）</span></div>
+          <div class="step"><span class="step-num">3</span><span class="step-text">按 <span class="key">Enter</span> 键执行命令</span></div>
+          <div class="step"><span class="step-num">4</span><span class="step-text">安装完成重启终端，输入 <code style="background:#e0f2fe;padding:1px 5px;border-radius:3px;font-family:var(--font-mono);font-weight:600">bun --version</code> 验证</span></div>
+        </div>
+      </div>
     </div>
-    <div class="tip"><span class="icon">✅</span><span>装完重启终端，输入 <code style="background:#fde68a;padding:1px 5px;border-radius:3px;font-family:var(--font-mono)">bun --version</code> 看到版本号即成功</span></div>
+    <div class="tip"><span class="icon">💡</span><span>macOS / Linux 用户看上方对应标签页。安装后输入 <code style="background:#fde68a;padding:1px 5px;border-radius:3px;font-family:var(--font-mono)">bun --version</code> 看到版本号即成功。</span></div>
 
     <h3>下载 Qdrant（向量数据库）</h3>
     <p>从 GitHub 下载对应平台的 <strong>qdrant</strong> 可执行文件，放到项目根目录。</p>
@@ -341,7 +401,7 @@
       <button class="tab" data-os="linux">Linux</button>
     </div>
     <div class="tab-content active" data-os="win" data-tabs="qdrant">
-      <p>下载 <code>qdrant-x86_64-pc-windows-msvc.zip</code>，解压得到 <code>qdrant.exe</code></p>
+      <p>找到 <strong>Windows</strong> 平台的 <code>qdrant-x86_64-pc-windows-msvc.zip</code> → 下载 → 解压 → 把 <code>qdrant.exe</code> 放到项目根目录</p>
     </div>
     <div class="tab-content" data-os="mac" data-tabs="qdrant">
       <div class="code-block"><span class="c2">brew install qdrant/tap/qdrant</span></div>
@@ -365,8 +425,16 @@
     <h3>克隆代码</h3>
     <div class="code-block"><span class="c2">git clone https://github.com/Zeke-777/gaokao-agent.git</span>
 <span class="c2">cd gaokao-agent</span></div>
+    <div class="terminal-guide">
+      <strong>📋 如何执行：</strong>
+      <div class="steps">
+        <div class="step"><span class="step-num">1</span><span class="step-text">打开终端，复制第一行命令粘贴，按 <span class="key">Enter</span> 克隆仓库</span></div>
+        <div class="step"><span class="step-num">2</span><span class="step-text">再复制第二行，按 <span class="key">Enter</span> 进入项目目录</span></div>
+        <div class="step"><span class="step-num">3</span><span class="step-text">⚠️ 后续所有命令都要在这个目录下执行！</span></div>
+      </div>
+    </div>
 
-    <div class="tip"><span class="icon">💡</span><span>没装 Git？到 GitHub 页面点 <strong>"Download ZIP"</strong> 下载解压也行</span></div>
+    <div class="tip"><span class="icon">💡</span><span>没装 Git？到 GitHub 页面点 <strong>"Download ZIP"</strong> 下载解压，然后终端 <code style="background:#fde68a;padding:1px 5px;border-radius:3px;font-family:var(--font-mono)">cd</code> 到解压目录即可</span></div>
 
     <h3>安装依赖</h3>
     <div class="code-block"><span class="c2">bun install</span></div>
@@ -486,9 +554,27 @@
     <div class="tab-content active" data-os="win" data-tabs="runqdrant">
       <div class="code-block"><span class="c1"># qdrant.exe 放在项目根目录后执行</span>
 <span class="c2">.\qdrant.exe --config-path qdrant\config\qdrant.yaml</span></div>
+      <div class="terminal-guide">
+        <strong>📋 如何执行：</strong>
+        <div class="steps">
+          <div class="step"><span class="step-num">1</span><span class="step-text">右键开始菜单，打开 <strong>"终端"</strong> 或 <strong>"PowerShell"</strong></span></div>
+          <div class="step"><span class="step-num">2</span><span class="step-text">先进入项目目录：输入 <code style="background:#e0f2fe;padding:1px 5px;border-radius:3px;font-family:var(--font-mono);font-weight:600">cd D:\gaokao-agent</code>（改成你的实际路径），按 <span class="key">Enter</span></span></div>
+          <div class="step"><span class="step-num">3</span><span class="step-text">再复制上方命令粘贴，按 <span class="key">Enter</span> 执行</span></div>
+          <div class="step"><span class="step-num">4</span><span class="step-text">看到日志输出说明启动成功。<strong>⚠️ 不要关闭这个终端窗口！</strong></span></div>
+        </div>
+      </div>
     </div>
     <div class="tab-content" data-os="mac" data-tabs="runqdrant">
       <div class="code-block"><span class="c2">qdrant --config-path qdrant/config/qdrant.yaml</span></div>
+      <div class="terminal-guide">
+        <strong>📋 如何执行：</strong>
+        <div class="steps">
+          <div class="step"><span class="step-num">1</span><span class="step-text"><span class="key">⌘ Cmd</span> + <span class="key">Space</span> → 输入 Terminal 打开终端</span></div>
+          <div class="step"><span class="step-num">2</span><span class="step-text">先进入项目目录：<code style="background:#e0f2fe;padding:1px 5px;border-radius:3px;font-family:var(--font-mono);font-weight:600">cd ~/gaokao-agent</code>，按 <span class="key">Enter</span></span></div>
+          <div class="step"><span class="step-num">3</span><span class="step-text">复制上方命令粘贴，按 <span class="key">Enter</span> 执行</span></div>
+          <div class="step"><span class="step-num">4</span><span class="step-text">看到日志输出说明启动成功。<strong>⚠️ 不要关闭这个终端窗口！</strong></span></div>
+        </div>
+      </div>
     </div>
 
     <div class="info"><span class="icon">🌐</span><span>访问 <a href="http://127.0.0.1:6333" target="_blank" rel="noopener" style="color:var(--accent);font-weight:500">http://127.0.0.1:6333</a>，看到 JSON 包含 <code>"title":"qdrant"</code> 就是成功了。<br>⚠️ <strong>保持这个终端开着</strong>，别关。</span></div>
@@ -503,7 +589,17 @@
   <!-- ====== Step 5: 初始化知识库 ====== -->
   <div class="step-card" id="s5">
     <h2>5. 初始化知识库</h2>
-    <p class="step-desc"><strong>新开一个终端</strong>，在项目根目录依次执行三条命令：</p>
+    <p class="step-desc">打开一个新终端，<strong>进入项目根目录</strong>，依次执行下面三条命令：</p>
+
+    <div class="terminal-guide" style="margin-bottom:20px">
+      <strong>📋 操作说明：</strong>
+      <div class="steps">
+        <div class="step"><span class="step-num">1</span><span class="step-text"><strong>新开一个终端窗口</strong>（不要用步骤 4 正在运行 Qdrant 的那个窗口）</span></div>
+        <div class="step"><span class="step-num">2</span><span class="step-text">进入项目目录：输入 <code style="background:#e0f2fe;padding:1px 5px;border-radius:3px;font-family:var(--font-mono);font-weight:600">cd 你的项目路径</code>，按 <span class="key">Enter</span></span></div>
+        <div class="step"><span class="step-num">3</span><span class="step-text">依次复制下方三条命令，<strong>每条执行完等它结束</strong>再执行下一条</span></div>
+        <div class="step"><span class="step-num">4</span><span class="step-text">每次粘贴后按 <span class="key">Enter</span> 键执行</span></div>
+      </div>
+    </div>
 
     <h3>① 创建集合</h3>
     <div class="code-block"><span class="c2">bun run qdrant/scripts/create-collections.cjs</span></div>
@@ -531,20 +627,28 @@
     <p class="step-desc">最后一步，选一种方式启动：</p>
 
     <h3>方式一：Web 开发模式（推荐）</h3>
-    <p>开两个终端：</p>
+    <p>需要同时运行两个程序，所以要开 <strong>两个终端窗口</strong>：</p>
     <div class="code-block"><span class="c1">终端 1 — 后端 API（http://127.0.0.1:3211）</span>
 <span class="c2">bun run server</span>
 <span class="c1">终端 2 — 前端热更新（http://127.0.0.1:3210）</span>
 <span class="c2">bun run web</span></div>
+    <div class="terminal-guide">
+      <strong>📋 操作说明：</strong>
+      <div class="steps">
+        <div class="step"><span class="step-num">1</span><span class="step-text">打开 <strong>第一个终端</strong>，进入项目目录，复制"终端 1"那条命令粘贴，按 <span class="key">Enter</span></span></div>
+        <div class="step"><span class="step-num">2</span><span class="step-text">再 <strong>新开第二个终端</strong>，同样进入项目目录，复制"终端 2"那条命令粘贴，按 <span class="key">Enter</span></span></div>
+        <div class="step"><span class="step-num">3</span><span class="step-text">浏览器打开 <strong>http://127.0.0.1:3210</strong> 即可看到聊天界面</span></div>
+      </div>
+    </div>
 
-    <h3>方式二：生产模式</h3>
+    <h3>方式二：生产模式（单终端）</h3>
     <div class="code-block"><span class="c2">bun run build</span>
 <span class="c2">bun run server</span></div>
-    <p style="font-size:12px;color:var(--muted)">单端口 http://127.0.0.1:3211 搞定所有</p>
+    <p style="font-size:12px;color:var(--muted)">两条命令<strong>依次</strong>执行（先 build 再 server），完成后打开 http://127.0.0.1:3211</p>
 
     <h3>方式三：CLI 命令行</h3>
     <div class="code-block"><span class="c2">bun run cli</span></div>
-    <p style="font-size:12px;color:var(--muted)">终端里直接对话</p>
+    <p style="font-size:12px;color:var(--muted)">终端里直接对话，适合快速调试。输入 <code style="font-family:var(--font-mono)">/help</code> 查看命令列表。</p>
 
     <div class="done-box">
       <div class="emoji">🎓</div>
