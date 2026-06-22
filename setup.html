@@ -371,14 +371,6 @@
     <h3>安装依赖</h3>
     <div class="code-block"><span class="c2">bun install</span></div>
 
-    <h3>复制环境变量模板</h3>
-    <div class="code-block"><span class="c1"># Windows（PowerShell / CMD）</span>
-<span class="c2">copy .env.example .env</span>
-
-<span class="c1"># macOS / Linux</span>
-<span class="c2">cp .env.example .env</span></div>
-    <p style="font-size:12px;color:var(--muted)">下一步会教你填写 .env 里的配置</p>
-
     <div class="btn-row">
       <button class="btn btn-prev" onclick="go(1)">← 上一步</button>
       <button class="btn btn-next" onclick="go(3)">下一步 →</button>
@@ -455,7 +447,7 @@
     </div>
 
     <div class="env-preview" id="envPrev"><span class="c1"># 填写上方表单后，这里自动生成 .env 内容</span></div>
-    <button class="btn-copy" id="btnCopyEnv" style="position:static;margin-top:8px;float:right" onclick="copyEnv()">📋 复制 .env 内容</button>
+    <button class="btn-copy" id="btnDownloadEnv" style="position:static;margin-top:8px;float:right" onclick="downloadEnv()">📥 下载 .env 文件</button>
 
     <div class="btn-row">
       <button class="btn btn-prev" onclick="go(2)">← 上一步</button>
@@ -673,14 +665,21 @@ function updateEnv(){
 document.querySelectorAll('#s3 input').forEach(inp=>{ inp.addEventListener('input',updateEnv); });
 updateEnv();
 
-function copyEnv(){
+function downloadEnv(){
   const text = document.getElementById('envPrev').textContent;
-  navigator.clipboard.writeText(text).then(()=>flashCopy()).catch(()=>{ flashCopy(); });
-}
-function flashCopy(){
-  const b=document.getElementById('btnCopyEnv');
-  b.textContent='✓ 已复制';b.classList.add('copied');
-  setTimeout(()=>{b.textContent='📋 复制 .env 内容';b.classList.remove('copied')},1800);
+  const blob = new Blob([text], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = '.env';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  const b = document.getElementById('btnDownloadEnv');
+  b.textContent = '✓ 已下载';
+  b.classList.add('copied');
+  setTimeout(() => { b.textContent = '📥 下载 .env 文件'; b.classList.remove('copied'); }, 1800);
 }
 
 function markDone(){
