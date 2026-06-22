@@ -627,38 +627,25 @@
   <!-- ====== Step 6: 启动 ====== -->
   <div class="step-card" id="s6">
     <h2>6. 启动服务 🎉</h2>
-    <p class="step-desc">最后一步，选一种方式启动：</p>
+    <p class="step-desc">打开一个新终端，进入项目根目录，依次执行：</p>
 
-    <h3>方式一：Web 开发模式（推荐）</h3>
-    <p>需要同时运行两个程序，所以要开 <strong>两个终端窗口</strong>：</p>
-    <div class="code-block"><span class="c1">终端 1 — 后端 API（http://127.0.0.1:3211）</span>
-<span class="c2">bun run server</span>
-<span class="c1">终端 2 — 前端热更新（http://127.0.0.1:3210）</span>
-<span class="c2">bun run web</span></div>
+    <div class="code-block"><span class="c2">bun run build</span>
+<span class="c2">bun run server</span></div>
+
     <div class="terminal-guide">
       <strong>📋 操作说明：</strong>
       <div class="steps">
-        <div class="step"><span class="step-num">1</span><span class="step-text">打开 <strong>第一个终端</strong>，进入项目目录，复制"终端 1"那条命令粘贴，按 <span class="key">Enter</span></span></div>
-        <div class="step"><span class="step-num">2</span><span class="step-text">再 <strong>新开第二个终端</strong>，同样进入项目目录，复制"终端 2"那条命令粘贴，按 <span class="key">Enter</span></span></div>
-        <div class="step"><span class="step-num">3</span><span class="step-text">浏览器打开 <strong>http://127.0.0.1:3210</strong> 即可看到聊天界面</span></div>
+        <div class="step"><span class="step-num">1</span><span class="step-text">打开一个新终端，进入项目目录，粘贴第一行按 <span class="key">Enter</span> 执行构建</span></div>
+        <div class="step"><span class="step-num">2</span><span class="step-text">构建完成后，粘贴第二行按 <span class="key">Enter</span> 启动服务</span></div>
+        <div class="step"><span class="step-num">3</span><span class="step-text">看到 <code style="background:#e0f2fe;padding:1px 5px;border-radius:3px;font-family:var(--font-mono);font-weight:600">🚀 高考志愿Agent API</code> 字样说明启动成功</span></div>
       </div>
     </div>
-
-    <h3>方式二：生产模式（单终端）</h3>
-    <div class="code-block"><span class="c2">bun run build</span>
-<span class="c2">bun run server</span></div>
-    <p style="font-size:12px;color:var(--muted)">两条命令<strong>依次</strong>执行（先 build 再 server），完成后打开 http://127.0.0.1:3211</p>
-
-    <h3>方式三：CLI 命令行</h3>
-    <div class="code-block"><span class="c2">bun run cli</span></div>
-    <p style="font-size:12px;color:var(--muted)">终端里直接对话，适合快速调试。输入 <code style="font-family:var(--font-mono)">/help</code> 查看命令列表。</p>
 
     <div class="done-box">
       <div class="emoji">🎓</div>
       <h2>配置完成！</h2>
-      <p>打开浏览器访问首页即可开始使用</p>
-      <a href="/" class="link-card">🏠 返回首页</a>
-      <a href="/app" class="link-card">💬 开始对话</a>
+      <p>服务已启动，点击下方链接开始使用</p>
+      <a href="http://127.0.0.1:3211" class="link-card" style="font-size:16px;font-weight:700;padding:14px 28px">🚀 http://127.0.0.1:3211</a>
     </div>
 
     <div class="btn-row">
