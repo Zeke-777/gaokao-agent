@@ -390,26 +390,8 @@
 
   <!-- ====== Step 2: 配置环境变量 ====== -->
   <div class="step-card" id="s2">
-    <h2>3. 配置环境变量</h2>
-
-    <!-- 检查是否已有 .env -->
-    <div id="envCheck">
-      <p class="step-desc" style="margin-bottom:16px">首先，检查你的项目根目录是否已经有 <code>.env</code> 文件：</p>
-      <div style="display:flex;gap:12px;flex-wrap:wrap">
-        <button class="btn" style="background:var(--success);color:#fff;font-size:15px;padding:14px 28px" onclick="showEnvForm()">✅ 没有，帮我配置</button>
-        <button class="btn" style="background:var(--bg);color:var(--fg-2);border:1px solid var(--border);font-size:15px;padding:14px 28px" onclick="skipEnv()">🏃 已存在，跳过此步</button>
-      </div>
-      <p style="font-size:12px;color:var(--muted);margin-top:12px">💡 如果项目是从 GitHub 克隆的，根目录可能只有 <code>.env.example</code>，没有 <code>.env</code></p>
-    </div>
-
-    <!-- 跳过时的提示 -->
-    <div id="envSkipped" style="display:none">
-      <div class="info"><span class="icon">✅</span><span>已跳过 .env 配置。如果你的 .env 缺少某些变量，随时回来补充。</span></div>
-    </div>
-
-    <!-- 配置表单（初始隐藏） -->
-    <div id="envFormWrap" style="display:none">
-      <p class="step-desc">在下方表单填写 API Key，然后点击按钮直接写入项目根目录的 <code>.env</code> 文件</p>
+    <h2>2. 配置环境变量</h2>
+    <p class="step-desc">在下方表单填写 API Key，然后点击按钮直接写入项目根目录的 <code>.env</code> 文件</p>
 
     <div class="env-group">
       <h4>🧠 LLM 大模型 <span class="badge req">必填</span></h4>
@@ -469,7 +451,6 @@
 
     <div class="env-preview" id="envPrev"><span class="c1"># 填写上方表单后，这里自动生成 .env 内容，点击下方按钮写入项目根目录</span></div>
     <button class="btn-copy" id="btnWriteEnv" style="position:static;margin-top:8px;float:right;background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600;padding:8px 16px" onclick="writeEnv()">📝 写入 .env 到项目根目录（需选择目录）</button>
-    </div>
 
     <div class="btn-row">
       <button class="btn btn-prev" onclick="go(1)">← 上一步</button>
@@ -606,15 +587,7 @@ function go(n){
   document.getElementById('s'+n).classList.add('active');
   step=n;
   update();
-  if(n===3) restoreEnvState();
   window.scrollTo({top:0,behavior:'smooth'});
-}
-
-function restoreEnvState(){
-  var s; try{s=localStorage.getItem('gaokao_setup_env')}catch(e){}
-  if(s==='skip') skipEnv();
-  else if(s==='new') showEnvForm();
-  // else: default — show envCheck
 }
 
 function update(){
@@ -699,21 +672,8 @@ function updateEnv(){
   }
   document.getElementById('envPrev').textContent = lines.join('\n');
 }
-document.querySelectorAll('#s3 input').forEach(inp=>{ inp.addEventListener('input',updateEnv); });
+document.querySelectorAll('#s2 input').forEach(inp=>{ inp.addEventListener('input',updateEnv); });
 updateEnv();
-
-function showEnvForm(){
-  document.getElementById('envCheck').style.display = 'none';
-  document.getElementById('envSkipped').style.display = 'none';
-  document.getElementById('envFormWrap').style.display = 'block';
-  try{localStorage.setItem('gaokao_setup_env','new')}catch{}
-}
-function skipEnv(){
-  document.getElementById('envCheck').style.display = 'none';
-  document.getElementById('envSkipped').style.display = 'block';
-  document.getElementById('envFormWrap').style.display = 'none';
-  try{localStorage.setItem('gaokao_setup_env','skip')}catch{}
-}
 
 async function writeEnv(){
   const text = document.getElementById('envPrev').textContent;
