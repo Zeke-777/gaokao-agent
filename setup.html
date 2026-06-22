@@ -536,7 +536,7 @@
     </div>
 
     <div class="env-preview" id="envPrev"><span class="c1"># 填写上方表单后，这里自动生成 .env 内容，点击下方按钮写入项目根目录</span></div>
-    <button class="btn-copy" id="btnWriteEnv" style="position:static;margin-top:8px;float:right;background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600;padding:8px 16px" onclick="writeEnv()">📝 写入 .env 到项目根目录</button>
+    <button class="btn-copy" id="btnWriteEnv" style="position:static;margin-top:8px;float:right;background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600;padding:8px 16px" onclick="writeEnv()">📝 写入 .env 到项目根目录（需选择目录）</button>
     </div>
 
     <div class="btn-row">
@@ -816,12 +816,10 @@ async function writeEnv(){
   const text = document.getElementById('envPrev').textContent;
   const btn = document.getElementById('btnWriteEnv');
 
-  // 尝试 File System Access API — 直接写入用户选择的目录
   if ('showDirectoryPicker' in window) {
     try {
       const dirHandle = await window.showDirectoryPicker({
         mode: 'readwrite',
-        startIn: 'documents'
       });
       const fileHandle = await dirHandle.getFileHandle('.env', { create: true });
       const writable = await fileHandle.createWritable();
@@ -832,42 +830,21 @@ async function writeEnv(){
       btn.style.background = 'var(--success)';
       btn.style.borderColor = 'var(--success)';
       setTimeout(() => {
-        btn.textContent = '📝 写入 .env 到项目根目录';
+        btn.textContent = '📝 写入 .env 到项目根目录（需选择目录）';
         btn.classList.remove('copied');
         btn.style.background = 'var(--accent)';
         btn.style.borderColor = 'var(--accent)';
       }, 2500);
       return;
     } catch (err) {
-      // 用户取消了目录选择 → 尝试下载兜底
-      if (err.name === 'AbortError') {
-        // 用户主动取消，不兜底
-      } else {
-        console.warn('File System API 写入失败，使用下载兜底:', err);
-      }
+      if (err.name === 'AbortError') return; // 用户取消选择
+      alert('写入失败：' + (err.message || err));
+      return;
     }
   }
 
-  // 兜底：浏览器不支持 showDirectoryPicker → 下载文件
-  const blob = new Blob([text], { type: 'text/plain' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = '.env';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-  btn.textContent = '✓ 已下载（放到项目根目录）';
-  btn.classList.add('copied');
-  btn.style.background = 'var(--success)';
-  btn.style.borderColor = 'var(--success)';
-  setTimeout(() => {
-    btn.textContent = '📝 写入 .env 到项目根目录';
-    btn.classList.remove('copied');
-    btn.style.background = 'var(--accent)';
-    btn.style.borderColor = 'var(--accent)';
-  }, 2500);
+  // 不支持 File System Access API
+  alert('当前浏览器不支持直接写入文件。请使用 Chrome 或 Edge 打开此页面。');
 }
 
 function markDone(){
